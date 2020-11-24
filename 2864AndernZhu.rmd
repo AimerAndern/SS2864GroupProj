@@ -12,7 +12,7 @@ library(magrittr)
 library(ggplot2)
 library(mapcan)
 library(dplyr)
-#data from 1/22/20 till 11/23/20
+#data from 1/22/20 till 11/22/20
 df <- read.csv(file = 'time_series_covid19_confirmed_global.csv')
 head(df)
 ```
@@ -23,7 +23,7 @@ df =df[40:52,]
 print(df)
 df
 
-df = df[c("Province.State","X11.23.20")]
+df = df[c("Province.State","X11.22.20")]
 #use mapcan
 pr_map <- mapcan(boundaries = province,
        type = standard) %>%
@@ -40,11 +40,11 @@ pr_geographic <- inner_join(pr_geographic,
            df, 
            by = c("pr_english" = "Province.State"))
 pr_geographic %>%
-  ggplot(aes(x = long, y = lat, group = group, fill = X11.23.20)) +
+  ggplot(aes(x = long, y = lat, group = group, fill = X11.22.20)) +
   geom_polygon() +
   coord_fixed() +
   theme_mapcan() +
-  scale_fill_viridis_c(name = "X11.23.20") +
+  scale_fill_viridis_c(name = "X11.22.20") +
   ggtitle("Canadian Population by Province")
 rlang::last_error()
 pop_2017 <- mapcan::province_pop_annual %>%
