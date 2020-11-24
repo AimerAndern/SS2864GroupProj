@@ -1,0 +1,49 @@
+---
+title: "SS2864GroupProj"
+author: "Rui Zhu"
+date: "11/23/2020"
+output: html_document
+---
+
+\newpage
+# Question 1
+```{r}
+library(magrittr) 
+library(ggplot2)
+library(mapcan)
+library(aggregate)
+df <- read.csv(file = 'covid19-download.csv')
+head(df)
+df
+keeps <- c("prname","numconf")
+df = df[keeps]
+df= aggregate(df['y'], by=df['x'], sum)
+df
+#use r data to load the dataframe of the crime about...
+x
+#use mapcan
+pr_map <- mapcan(boundaries = province,
+       type = standard) %>%
+  ggplot(aes(x = long, y = lat, group = group))
+pr_map
+pr_map <- pr_map +
+  geom_polygon() +
+  coord_fixed()
+pr_geographic <- mapcan(boundaries = province,
+       type = standard)
+
+
+pr_geographic <- inner_join(pr_geographic, 
+           df, 
+           by = c("prname" = "province"))
+pr_geographic %>%
+  ggplot(aes(x = long, y = lat, group = group, fill = population)) +
+  geom_polygon() +
+  coord_fixed() +
+  theme_mapcan() +
+  scale_fill_viridis_c(name = "Population") +
+  ggtitle("Canadian Population by Province")
+rlang::last_trace()
+
+
+```
