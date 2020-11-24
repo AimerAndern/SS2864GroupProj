@@ -7,7 +7,9 @@ https://dataverse.scholarsportal.info/dataset.xhtml?persistentId=doi:10.5683/SP2
 https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series<br/>
 Since the data is keeping updated, the data used in this project from '01/22/20 till 11/22/20'.
 ## It contains following parts:<br/>
-  ### No.??? Graphing current Canadian confirmed cases on Canada map(Rui Zhu)<br/>
-  ### No.??? Regression Analysis by using machine learning method(e.g., PRESS) (Rui Zhu<br/>
-  ### No.??? Comparison with using default package and vertify with our test data.
-  ### No.??? Conclusion on the future of statistics computing and the trend of the COVID-19, maybe plus some tiny life tips(IDK for real)(Rui Zhu)<br/>
+  ### No.1 Graphing current Canadian confirmed cases on Canada map(Rui Zhu)<br/>
+  ### No.2 Regression Analysis by using machine learning method(e.g., PRESS) (Rui Zhu<br/>
+  ### No.4 Comparison with using default package and vertify with our test data.
+  ### No.5 Conclusion on the future of statistics computing and the trend of the COVID-19, maybe plus some tiny life tips(IDK for real)(Rui Zhu)<br/>
+##
+## Add more parts you are interested about and make it become your To-do-list! Make sure you name your rmd file or r script file with your full name and task number.
