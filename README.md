@@ -5,7 +5,7 @@ This project is completed jointly by Ruiqin Yang, Zhiying Chen, Rui Zhu and Jiah
 https://health-infobase.canada.ca/covid-19/epidemiological-summary-covid-19-cases.html<br/>
 https://dataverse.scholarsportal.info/dataset.xhtml?persistentId=doi:10.5683/SP2/KNJLWS<br/>
 https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series<br/>
-Since the data is keeping updated, the data used in this project from '01/22/20 till 11/22/20'.
+Since the data is keeping updated, the data used in this project from `01/22/20 till 11/22/20`.
 ## It contains following parts:<br/>
   ### No.1 Graphing current Canadian confirmed cases on Canada map(Rui Zhu)<br/>
   ### No.2 Regression Analysis by using machine learning method(e.g., PRESS) (Rui Zhu<br/>
