@@ -9,6 +9,7 @@ Since the data is keeping updated, the data used in this project from `01/22/20 
 ## It contains following parts:<br/>
   ### No.1 Graphing current Canadian confirmed cases on Canada map(Rui Zhu)<br/>
   ### No.2 Regression Analysis by using machine learning method(e.g., PRESS) (Rui Zhu<br/>
+  ### No.3 Covid World Map: Tracking the Global Outbreak(Ruiqin Yang)<br/>
   ### No.4 Comparison with using default package and vertify with our test data.
   ### No.5 Conclusion on the future of statistics computing and the trend of the COVID-19, maybe plus some tiny life tips(IDK for real)(Rui Zhu)<br/>
 ##
