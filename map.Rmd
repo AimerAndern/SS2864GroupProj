@@ -1,0 +1,92 @@
+---
+title: "MAP"
+author: "ryang273"
+date: "25/11/2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+```{r}
+library(tidyverse)
+library(sf)
+library(tmap)
+library(grid)
+data("World")
+Deaths <- read_csv("/Users/yangruiqin/Desktop/2864/time_series_covid19_deaths_global.csv")
+Confirmed <- read_csv("/Users/yangruiqin/Desktop/2864/time_series_covid19_confirmed_global.csv")
+Recovered <- read_csv("/Users/yangruiqin/Desktop/2864/time_series_covid19_recovered_global.csv")
+Deaths_data <- Deaths %>%
+  group_by(`Country/Region`) %>%
+  summarise(Deaths = sum(`11/22/20`, na.rm =TRUE)) %>%
+  rename(Region = `Country/Region`)
+Confirmed_data <- Confirmed %>%
+  group_by(`Country/Region`) %>%
+  summarise(Confirmed = sum(`11/22/20`, na.rm = TRUE)) %>%
+  rename(Region = `Country/Region`)
+Recovered_data <- Recovered %>%
+  group_by(`Country/Region`) %>%
+  summarise(Recovered = sum(`11/22/20`, na.rm = TRUE)) %>%
+  rename(Region = `Country/Region`)
+Comb_deaths <- Deaths_data %>%
+  mutate(Region = replace(Region, Region == "US", "United States"))%>%
+  group_by(Region) %>%
+  summarise(Deaths = sum(Deaths, na.rm = TRUE)) %>%
+  ungroup()
+Comb_confirmed <- Confirmed_data %>%
+  mutate(Region = replace(Region, Region == "US", "United States"))%>%
+  group_by(Region) %>%
+  summarise(Confirmed = sum(Confirmed, na.rm = TRUE)) %>%
+  ungroup()
+Comb_recovered <- Recovered_data %>%
+  mutate(Region = replace(Region, Region == "US", "United States"))%>%
+  group_by(Region) %>%
+  summarise(Recovered = sum(Recovered, na.rm = TRUE)) %>%
+  ungroup()
+comb <-Comb_confirmed %>%  
+  left_join(Comb_deaths, by = "Region")%>%  
+  left_join(Comb_recovered, by ="Region")
+cov_world <- left_join(World, comb, by = c("name" = "Region")) %>%
+  replace_na(list(Confirmed=0, Deaths=0, Recovered=0))
+mybreaks<- c(0,1, 10,100, 500, 1000,10000,50000,100000,500000,10000000,15000000)
+p1 <- tm_shape(cov_world) +
+  tm_polygons(col="Deaths", breaks=mybreaks, title="Death cases", palette="Reds") +
+  tm_legend(position=c("left", "centre"))
+mybreaks<- c(0,1, 10,100, 500, 1000,10000,50000,100000,500000,10000000,15000000)
+p2 <- tm_shape(cov_world) +
+  tm_polygons(col="Confirmed", breaks=mybreaks, title="Confirmed cases", palette="Purples") +
+  tm_legend(position=c("left", "centre"))
+mybreaks<- c(0,1, 10,100, 500, 1000,10000,50000,100000,500000,10000000,15000000)
+p3 <- tm_shape(cov_world) +
+  tm_polygons(col="Recovered", breaks=mybreaks, title="Recovered cases", palette="Greens") +
+  tm_legend(position=c("left", "centre"))
+multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
+  require(grid)
+
+  plots <- c(list(...), plotlist)
+
+  numPlots = length(plots)
+
+  if (is.null(layout)) {
+    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
+                 ncol = cols, nrow = ceiling(numPlots/cols))
+}
+
+if (numPlots == 1) {
+print(plots[[1]])
+
+} else {
+grid.newpage()
+pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+
+for (i in 1:numPlots) {
+  matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
+
+  print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
+                                  layout.pos.col = matchidx$col))
+ }
+}
+ }
+multiplot(p2, p1,p3, cols = 1)
+
+```
+
