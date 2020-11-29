@@ -8,7 +8,7 @@ https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_c
 Since the data is keeping updated, the data used in this project from `01/22/20 till 11/22/20`.
 ## It contains following parts:<br/>
   ### No.1 Graphing current Canadian confirmed cases on Canada map(Rui Zhu)<br/>
-  ### No.2 Regression Analysis by using machine learning method(e.g., PRESS) (Rui Zhu<br/>
+  ### No.2 Regression Analysis by using machine learning method(e.g., LOOCV) (Rui Zhu<br/>
   ### No.3 Covid World Map: Tracking the Global Outbreak(Ruiqin Yang)<br/>
            The situation and recover rate in Top 15 confirmed cases Country .
   ### No.4 Comparison with using default package and vertify with our test data.
