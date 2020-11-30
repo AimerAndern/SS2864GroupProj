@@ -113,5 +113,33 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
   }
 }
 multiplot(p1, p2,p3, cols = 1)
+col <- ncol(Confirmed)
+dates <- names(Confirmed)[5:col] %>% substr(0,8) %>% mdy()
+range(dates)
+cleanData <- function(data) {
+  data %<>% select(-c(`Province/State`, Lat, Long)) %>% rename(country=`Country/Region`)
+  data %<>% gather(key=date, value=count,-country)
+  data %<>% mutate(date = date %>% substr(0,8) %>% mdy())
+  data %<>% group_by(country, date) %>% summarise(count=sum(count, na.rm=T)) %>% as.data.frame()
+  return(data)
+}
+New_Confirmed <- Confirmed %>% cleanData() %>% rename(confirmed=count)
+New_Deaths <- Deaths %>% cleanData() %>% rename(deaths=count)
+New_Recovered <- Recovered %>% cleanData() %>% rename(recovered=count)
+data <- data.confirmed %>% merge(data.deaths, all=T) %>% merge(data.recovered, all=T)
+data.world <- data %>% group_by(date) %>%
+  summarise(Confirmed = sum(confirmed, na.rm=T),
+            Recovered = sum(recovered, na.rm=T),
+            Deaths = sum(deaths, na.rm=T))
+overall <- data.world %>% 
+  melt(id.vars = "date", 
+       measure.vars = c("Confirmed","Recovered","Deaths"))
+ggplot(overall) + 
+  geom_bar(aes(x = date, y = value, fill = variable), 
+           stat = "identity", position = "fill") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1.1, vjust = 1.1)) + 
+  labs(title = "Numbers of Cases Worldwide", x = "date", y = "") + 
+  guides(fill = guide_legend(title = NULL)) +
+  scale_fill_discrete(labels = c("Confirmed","Recovered","Deaths"))
 ```
 
