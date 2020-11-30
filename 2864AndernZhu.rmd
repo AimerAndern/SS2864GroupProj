@@ -9,6 +9,7 @@ output:
 
 \newpage
 # Andern's work 11/24/20
+  * The goal of this part is to see the trend of confirmed cases in last 300 days and make reasonable hypothesis for potiential factors that might affect the cumulative number of confirmed cases.
 ```{r}
 library(magrittr) 
 library(ggplot2)
