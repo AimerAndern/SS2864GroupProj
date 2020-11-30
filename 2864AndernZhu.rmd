@@ -1,0 +1,112 @@
+---
+title: "SS2864GroupProj"
+author: "Rui Zhu"
+date: "11/23/2020"
+output:
+  word_document: default
+  html_document: default
+---
+
+\newpage
+# Andern's work 11/24/20
+```{r}
+library(magrittr) 
+library(ggplot2)
+library(mapcan)
+library(dplyr)
+#data from 1/22/20 till 11/22/20
+df <- read.csv(file = 'time_series_covid19_confirmed_global.csv')
+
+#And then we trim the dataframe a little bit before we utilize it for the first task 
+
+df = df[-(42:43),]
+df =df[40:52,]
+
+
+
+df = df[c("Province.State","X11.23.20")]
+#use mapcan
+pr_map <- mapcan(boundaries = province,
+       type = standard) %>%
+  ggplot(aes(x = long, y = lat, group = group))
+pr_map <- pr_map +
+  geom_polygon() +
+  coord_fixed()
+pr_geographic <- mapcan(boundaries = province,
+       type = standard)
+
+
+pr_geographic <- inner_join(pr_geographic, 
+           df, 
+           by = c("pr_english" = "Province.State"))
+pr_geographic %>%
+  ggplot(aes(x = long, y = lat, group = group, fill = X11.23.20)) +
+  geom_polygon() +
+  coord_fixed() +
+  theme_mapcan() +
+  scale_fill_viridis_c(name = "X11.23.20") +
+  ggtitle("Canadian Confirmed Cases by Province")
+
+#global histogram 
+df <- read.csv(file = 'time_series_covid19_confirmed_global.csv')
+df=df[0:310]
+df= colSums(df[,-(1:4)])
+plot(df)
+#canada histogram
+df2 <- read.csv(file = 'time_series_covid19_confirmed_global.csv')
+df2 =df2[40:54,]
+df2= colSums(df2[,-(1:4)])
+plot(df2)
+```
+  * The ggplot indicates that the number of confirmed cases decreases from two sided of the border honrizontally.  
+  * The ggplot indicates that Ontario and Quebec are two provinces with most cumulative confirmed cases.
+  * Analysis: By adding extra features, the model predicts the growth rate of cases will reach its peak around Christmas Day. However, adding extra features will decrease its reliability. Ontario, especially GTA, will have the highest growth rate , as most populous province in Canada.
+  
+
+\newpage
+# Second Part
+  * Therefore, we make the hypothesis that keeping all other factors unchanged, the norther wherever is, it has less confirmed cases(Simple hypothesis, should not be hard to test)
+```{r}
+library(tidyverse)
+library(caret)
+df <- read.csv(file = 'time_series_covid19_confirmed_US.csv')
+df = df[c(9,10,317)]
+train.control <- trainControl(method = "LOOCV")
+model <- train(X11.22.20 ~., data = df, method = "lm",
+               trControl = train.control)
+
+print(model)
+
+
+#lat only
+df <- read.csv(file = 'time_series_covid19_confirmed_US.csv')
+df = df[c(9,317)]
+train.control <- trainControl(method = "LOOCV")
+model <- train(X11.22.20 ~., data = df, method = "lm",
+               trControl = train.control)
+print(model)
+
+#Or maybe I should just fit into a simple linear regression model, LOOCV might be way too strict
+df2 <- read.csv(file = 'time_series_covid19_confirmed_US.csv')
+df2 = df2[c(9,10,317)]
+reg = lm(X11.22.20 ~Lat+Long_, data = df2)
+summary(reg)
+```
+  * Conclusion: We reject the first null hypothesis that latitude itself might be a sub-factor of some other significant factors. However, in the case of both latitude and longitude, they are not significantly important to explain the model
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
