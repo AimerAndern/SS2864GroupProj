@@ -56,18 +56,18 @@ overall <- top.countries_confirmed %>%
   melt(id.vars = "Region", 
        measure.vars = c("Confirmed"))
 options(scipen=220)
-p1 <- ggplot(overall) + 
+p1 <- overall %>%
+  mutate(Region = fct_reorder(Region, desc(value))) %>%ggplot() + 
   geom_bar(aes(x = Region, y = value, fill = variable), 
            stat = "identity", position="identity") +geom_text(aes(x = Region, y = value,label = value),size = 2,vjust = 1.5)+
   theme(axis.text.x = element_text(angle = 45, hjust=0.5)) + 
   labs(title = "Cases in Top 15 Countries", x = "Region", y = "") + 
   guides(fill = guide_legend(title = NULL))
 overall_deaths <-  top.countries_confirmed%>%mutate(deaths.rate=(100 * Deaths/Confirmed) %>% round(1))
-overall_deaths
 overall_Deaths <- overall_deaths %>% 
   melt(id.vars = "Region", 
        measure.vars = c("deaths.rate"))
-p2 <- ggplot(overall_Deaths) + 
+p2 <- overall_Deaths%>%mutate(Region = fct_reorder(Region, desc(value))) %>%ggplot()+ 
   geom_bar(aes(x = Region, y = value, fill = variable), 
            stat = "identity", position="identity") +geom_text(aes(x = Region, y = value,label = value),size = 2,vjust = 1.5)+
   theme(axis.text.x = element_text(angle = 45, hjust=0.5)) + 
@@ -75,12 +75,10 @@ p2 <- ggplot(overall_Deaths) +
   guides(fill = guide_legend(title = NULL)) +
   scale_fill_discrete(labels = c("Deaths rate(%)"))
 new <-  top.countries_confirmed%>%mutate(recover.rate=(100 * Recovered/Confirmed) %>% round(1))
-new
 new_overall <- new %>% 
   melt(id.vars = "Region", 
        measure.vars = c("recover.rate"))
-new_overall
-p3 <- ggplot(new_overall) + 
+p3 <- new_overall %>%mutate(Region = fct_reorder(Region, desc(value))) %>%ggplot() +
   geom_bar(aes(x = Region, y =value , fill=variable), 
            stat = "identity", position="identity") +geom_text(aes(x = Region, y = value,label = value),size = 3)+
   theme(axis.text.x = element_text(angle = 45, hjust=0.5)) + 
