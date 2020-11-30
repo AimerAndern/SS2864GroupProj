@@ -148,7 +148,7 @@ CAD$name <- factor(CAD$Province_State,
 ggplot(CAD[1:5,], aes(y=Deaths, x=name)) + 
   geom_bar(position="dodge", stat="identity",width=0.5)+
   ggtitle("CAD Deaths Top 5")+
-  xlab("State")
+  xlab("Province")
 ```
 
 ```{r}
@@ -158,7 +158,7 @@ CAD$name <- factor(CAD$Province_State,
 ggplot(CAD[1:5,], aes(y=Recovered, x=name)) + 
   geom_bar(position="dodge", stat="identity",width=0.5)+
   ggtitle("CAD Recovered Top 5")+
-  xlab("State")
+  xlab("Province")
 ```
 
 ```{r}
@@ -168,7 +168,7 @@ CAD$name <- factor(CAD$Province_State,
 ggplot(CAD[1:5,], aes(y=Death_Rate, x=name)) + 
   geom_bar(position="dodge", stat="identity",width=0.5)+
   ggtitle("CAD Deaths Rate Top 5")+
-  xlab("State")
+  xlab("Province")
 ```
 
 ```{r}
@@ -178,5 +178,5 @@ CAD$name <- factor(CAD$Province_State,
 ggplot(CAD[1:5,], aes(y=Recover_Rate, x=name)) + 
   geom_bar(position="dodge", stat="identity",width=0.5)+
   ggtitle("CAD Recovered Rate Top 5")+
-  xlab("State")
+  xlab("Province")
 ```
