@@ -1,6 +1,6 @@
 # SS2864GroupProj<br/>
 ## SS2864GroupProj Temporary repository<br/>
-## 11-29-2020 Update, the coding and markdown parts are supposed to be finished now. And you should now start working on your slides. Ask me for link and permission of the slides.
+## 11-29-2020 Update, the coding and markdown parts are supposed to be finished now. And you should now start working on your slides. Ask me for link and permission to edit the slides.
 This project is completed jointly by Ruiqin Yang, Zhiying Chen, Rui Zhu and Jiahao Liu.<br/>
 ## The dataset used can be found from <br/> 
 https://health-infobase.canada.ca/covid-19/epidemiological-summary-covid-19-cases.html<br/>
