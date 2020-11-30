@@ -1,0 +1,182 @@
+---
+title: ""
+author: ""
+
+output: html_document
+---
+
+
+```{r,message=FALSE,warning=FALSE}
+library(data.table)
+library(DT)
+library(vcd)
+library(ggplot2)
+library(dplyr)
+library(reshape2)
+library(MASS)
+library(cowplot)
+library(usmap)
+library(rworldmap)
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+```
+
+```{r}
+dat <- as.data.table(fread(input = "11-22-2020 global daily update.csv", verbose = F))
+US <- as.data.table(fread(input = "11-22-2020 us daily update.csv", verbose = F))
+CAD <- dat[dat$Country_Region=="Canada",]
+```
+
+
+
+```{r}
+US <- US[!(US$Province_State %in% c("Diamond Princess","Grand Princess")),c(1,2,4:9)]
+CAD <- CAD[!(CAD$Province_State %in% c("Diamond Princess","Grand Princess")),c(3,4,6:11)]
+US$Death_Rate <- US$Deaths/US$Confirmed
+US$Recover_Rate <- US$Recovered/US$Confirmed
+CAD$Death_Rate <- CAD$Deaths/CAD$Confirmed
+CAD$Recover_Rate <- CAD$Recovered/CAD$Confirmed
+US <- US[US$Confirmed>0,]
+US[is.na(US),] <- 0
+```
+
+```{r}
+na <- rbind(US,CAD)
+```
+
+
+```{r,warning=FALSE}
+world <- ne_countries(scale = "medium", returnclass = "sf")
+ggplot(data = world) +
+  geom_sf() +
+  geom_point(data = na,
+             aes(x = Long_, y = Lat, size = Deaths,color = Deaths),
+              alpha = 0.5)+
+  scale_color_gradient(low="blue", high="red")+
+  labs( x = "Longitude", y = "Latitude") +
+  theme(panel.background = element_rect(fill = "lightblue",
+                                colour = "lightblue"),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        # surpress legend
+        axis.line=element_blank(),
+        axis.text.x=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks=element_blank(),
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank())+
+  xlim(-170,-50)+
+  ylim(20,80)+
+  ggtitle("North American--Deaths")
+```
+
+
+
+```{r,warning=FALSE}
+world <- ne_countries(scale = "medium", returnclass = "sf")
+ggplot(data = world) +
+  geom_sf() +
+  geom_point(data = na,
+             aes(x = Long_, y = Lat, size = Recovered,color = Recovered),
+              alpha = 0.5)+
+  scale_color_gradient(low="red", high="green")+
+  labs( x = "Longitude", y = "Latitude") +
+  theme(panel.background = element_rect(fill = "lightblue",
+                                colour = "lightblue"),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        # surpress legend
+        axis.line=element_blank(),
+        axis.text.x=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks=element_blank(),
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank())+
+  xlim(-170,-50)+
+  ylim(20,80)+
+  ggtitle("North American--Recovered")
+```
+
+```{r}
+US <- US[order(US$Deaths,decreasing=T),]
+US$name <- factor(US$Province_State, 
+                  levels = US$Province_State[order(US$Deaths,decreasing=T)])
+ggplot(US[1:5,], aes(y=Deaths, x=name)) + 
+  geom_bar(position="dodge", stat="identity",width=0.5)+
+  ggtitle("US Deaths Top 5")+
+  xlab("State")
+```
+
+```{r}
+US <- US[order(US$Recovered,decreasing=T),]
+US$name <- factor(US$Province_State, 
+                  levels = US$Province_State[order(US$Recovered,decreasing=T)])
+ggplot(US[1:5,], aes(y=Recovered, x=name)) + 
+  geom_bar(position="dodge", stat="identity",width=0.5)+
+  ggtitle("US Recovered Top 5")+
+    xlab("State")
+```
+
+```{r}
+US <- US[order(US$Death_Rate,decreasing=T),]
+US$name <- factor(US$Province_State, 
+                  levels = US$Province_State[order(US$Death_Rate,decreasing=T)])
+ggplot(US[1:5,], aes(y=Death_Rate, x=name)) + 
+  geom_bar(position="dodge", stat="identity",width=0.5)+
+  ggtitle("US Deaths Rate Top 5")+
+    xlab("State")
+```
+
+```{r}
+US <- US[order(US$Recover_Rate,decreasing=T),]
+US$name <- factor(US$Province_State, 
+                  levels = US$Province_State[order(US$Recover_Rate,decreasing=T)])
+ggplot(US[1:5,], aes(y=Recover_Rate, x=name)) + 
+  geom_bar(position="dodge", stat="identity",width=0.5)+
+  ggtitle("US Recovered Rate Top 5")+
+    xlab("State")
+```
+
+
+
+
+```{r}
+CAD <- CAD[order(CAD$Deaths,decreasing=T),]
+CAD$name <- factor(CAD$Province_State, 
+                  levels = CAD$Province_State[order(CAD$Deaths,decreasing=T)])
+ggplot(CAD[1:5,], aes(y=Deaths, x=name)) + 
+  geom_bar(position="dodge", stat="identity",width=0.5)+
+  ggtitle("CAD Deaths Top 5")+
+  xlab("State")
+```
+
+```{r}
+CAD <- CAD[order(CAD$Recovered,decreasing=T),]
+CAD$name <- factor(CAD$Province_State, 
+                  levels = CAD$Province_State[order(CAD$Recovered,decreasing=T)])
+ggplot(CAD[1:5,], aes(y=Recovered, x=name)) + 
+  geom_bar(position="dodge", stat="identity",width=0.5)+
+  ggtitle("CAD Recovered Top 5")+
+  xlab("State")
+```
+
+```{r}
+CAD <- CAD[order(CAD$Death_Rate,decreasing=T),]
+CAD$name <- factor(CAD$Province_State, 
+                  levels = CAD$Province_State[order(CAD$Death_Rate,decreasing=T)])
+ggplot(CAD[1:5,], aes(y=Death_Rate, x=name)) + 
+  geom_bar(position="dodge", stat="identity",width=0.5)+
+  ggtitle("CAD Deaths Rate Top 5")+
+  xlab("State")
+```
+
+```{r}
+CAD <- CAD[order(CAD$Recover_Rate,decreasing=T),]
+CAD$name <- factor(CAD$Province_State, 
+                  levels = CAD$Province_State[order(CAD$Recover_Rate,decreasing=T)])
+ggplot(CAD[1:5,], aes(y=Recover_Rate, x=name)) + 
+  geom_bar(position="dodge", stat="identity",width=0.5)+
+  ggtitle("CAD Recovered Rate Top 5")+
+  xlab("State")
+```
