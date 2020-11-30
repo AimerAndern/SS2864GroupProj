@@ -11,6 +11,8 @@ library(tidyverse)
 library(reshape2)
 library(ggplot2)
 require(cowplot)
+ibrary(magrittr) 
+library(lubridate)  
 Confirmed <- read_csv("/Users/yangruiqin/Desktop/2864/time_series_covid19_confirmed_global.csv")
 Recovered <- read_csv("/Users/yangruiqin/Desktop/2864/time_series_covid19_recovered_global.csv")
 Deaths <- read_csv("/Users/yangruiqin/Desktop/2864/time_series_covid19_deaths_global.csv")
@@ -113,6 +115,7 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
   }
 }
 multiplot(p1, p2,p3, cols = 1)
+
 col <- ncol(Confirmed)
 dates <- names(Confirmed)[5:col] %>% substr(0,8) %>% mdy()
 range(dates)
@@ -126,7 +129,7 @@ cleanData <- function(data) {
 New_Confirmed <- Confirmed %>% cleanData() %>% rename(confirmed=count)
 New_Deaths <- Deaths %>% cleanData() %>% rename(deaths=count)
 New_Recovered <- Recovered %>% cleanData() %>% rename(recovered=count)
-data <- data.confirmed %>% merge(data.deaths, all=T) %>% merge(data.recovered, all=T)
+data <- New_Confirmed %>% merge(New_Deaths, all=T) %>% merge(New_Recovered, all=T)
 data.world <- data %>% group_by(date) %>%
   summarise(Confirmed = sum(confirmed, na.rm=T),
             Recovered = sum(recovered, na.rm=T),
@@ -141,5 +144,6 @@ ggplot(overall) +
   labs(title = "Numbers of Cases Worldwide", x = "date", y = "") + 
   guides(fill = guide_legend(title = NULL)) +
   scale_fill_discrete(labels = c("Confirmed","Recovered","Deaths"))
+
 ```
 
